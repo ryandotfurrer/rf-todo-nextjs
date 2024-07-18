@@ -14,8 +14,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark:dark">
-      <body className="bg-background text-mutedForeground px-4 pb-8 text-pretty">
-        <div className="max-auto max-w-screen-lg">{children}</div>
+      <body className="bg-background text-muted-foreground px-4 pb-8 text-pretty">
+        <div className="max-w-screen-sm mx-auto">{children}</div>
       </body>
     </html>
   );
