@@ -2,19 +2,25 @@
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { setItem, getTask, removeTask } from "@/utils/localStorage";
 
 export default function Home() {
-  const [taskComplete, setTaskComplete] = useState(false);
+  const [task, setTask] = useState({});
 
-  const completeTask = () => {
-    setTaskComplete(!taskComplete);
-    console.log(taskComplete);
-  };
+  useEffect(() => {
+    // Load data from localStorage on component mount
+    const storedTasks = getTask("myTasks");
+    if (storedTasks) {
+      setTask(storedTasks);
+    }
+  }, []);
 
-  const taskStyles = taskComplete
-    ? "line-through text-muted-foreground"
-    : "text-foreground";
+  // const handleSaveData = () => {
+  //   const newTask = { example: "value" };
+  //   setItem("myData", JSON.stringify(newTask));
+  //   setTask(newTask);
+  // };
 
   return (
     <>
@@ -29,22 +35,23 @@ export default function Home() {
             <label htmlFor="task" className="sr-only">
               Task
             </label>
-            <Input type="text" placeholder="Add a task" />
-            <Button>Add task</Button>
+            <Input type="text" id="task" placeholder="Add a task" />
+            <Button
+              onClick={() => {
+                const newTask = { example: "value" };
+                setItem("myData", JSON.stringify(newTask));
+              }}
+            >
+              Add task
+            </Button>
           </form>
-          <ul id="task-list" className="pt-8">
-            <li
-              onClick={completeTask}
-              className={`cursor-pointer ${taskStyles}`}
-            >
-              task
-            </li>
-            <li
-              onClick={completeTask}
-              className={`cursor-pointer ${taskStyles}`}
-            >
-              completed task
-            </li>
+          <ul>
+            {Object.keys(task).map((key) => (
+              <li key={key} className="flex gap-4">
+                <span>{key}</span>
+                <Button onClick={() => removeTask(key)}>Remove</Button>
+              </li>
+            ))}
           </ul>
         </section>
       </main>
